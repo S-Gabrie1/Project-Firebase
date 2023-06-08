@@ -72,7 +72,7 @@ function Find() {
 
       todoCheckbox.addEventListener("change", (event) => {
         event.preventDefault();
-        //Antons Kod går här
+        checkedBox(todoCheckbox.checked, title.value, key);
       });
 
       const todoTitle = document.createElement("input");
@@ -117,7 +117,7 @@ function Find() {
         );
       });
 
-      //Qendresas KOD GÅR HÄR
+      addDueDateMessage(todo.Date, todoContainer, todoDate);
 
       todoContainer.append(
         todoTitle,
@@ -131,7 +131,39 @@ function Find() {
   });
 }
 
+
+function addDueDateMessage(todoDate, container, todoDateptag) {
+  const todoItemDate = new Date(todoDate);
+  const currentDate = new Date();
+  const differenceInTime = todoItemDate.getTime() - currentDate.getTime();
+  const differenceInDays = Math.ceil(
+    differenceInTime / (1000 * 3600 * 24)
+  );
+
+  if (differenceInDays >= 0 && differenceInDays <= 5) {
+    const daysRemaining =
+      differenceInDays === 0 ? "today" : `${differenceInDays} days`;
+    const message = document.createElement("p");
+    message.innerHTML = `Due ${daysRemaining} remaining!`;
+    todoDateptag.appendChild(message);
+  }
+}
+
+
 Find();
+
+function checkedBox(isChecked, titleValue, todoKey) {
+  // Update the "Checked" property in Firebase based on the current checked state
+  update(ref(db, "Todo/" + titleValue + "/" + todoKey), {
+    Checked: isChecked,
+  })
+    .then(() => {
+      console.log("Data updated successfully");
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
 
 btn.addEventListener("click", (event) => {
   event.preventDefault();
