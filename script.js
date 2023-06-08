@@ -72,7 +72,7 @@ function Find() {
 
       todoCheckbox.addEventListener("change", (event) => {
         event.preventDefault();
-        //Antons Kod går här
+        checkedBox(todoCheckbox.checked, title.value, key);
       });
 
       const todoTitle = document.createElement("input");
@@ -127,6 +127,19 @@ function addDueDateMessage(todoDate, container, todoDateptag) {
 
 
 Find();
+
+function checkedBox(isChecked, titleValue, todoKey) {
+  // Update the "Checked" property in Firebase based on the current checked state
+  update(ref(db, "Todo/" + titleValue + "/" + todoKey), {
+    Checked: isChecked,
+  })
+    .then(() => {
+      console.log("Data updated successfully");
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
 
 btn.addEventListener("click", (event) => {
   event.preventDefault();
