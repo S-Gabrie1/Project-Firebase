@@ -7,73 +7,17 @@
     <title>Document</title>
   </head>
   <body>
-    <div>
+    <div id="inputsField">
       <h1>Add Your Todo</h1>
       <input id="title" type="text" placeholder="Add title" />
+      <input id="number-id" type="number" placeholder="Add ID" />
       <input id="description" type="text" placeholder="Add description" />
-      <input id="date" type="date">
+      <input id="date" type="date" />
 
       <button id="addBtn">Add</button>
       <button id="updateBtn">Update</button>
     </div>
-    <script type="module">
-      // Import the functions you need from the SDKs you need
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
-      // TODO: Add SDKs for Firebase products that you want to use
-      // https://firebase.google.com/docs/web/setup#available-libraries
-
-      // Your web app's Firebase configuration
-      const firebaseConfig = {
-        apiKey: "AIzaSyBh9U9gR3QsZqAIMCHxjvWo-BwMp5hPFns",
-        authDomain: "todolistt-2f80e.firebaseapp.com",
-        databaseURL:
-          "https://todolistt-2f80e-default-rtdb.europe-west1.firebasedatabase.app",
-        projectId: "todolistt-2f80e",
-        storageBucket: "todolistt-2f80e.appspot.com",
-        messagingSenderId: "621666516115",
-        appId: "1:621666516115:web:cb3778a89ff4b012b3a166",
-      };
-
-      // Initialize Firebase
-      const app = initializeApp(firebaseConfig);
-      import {
-        getDatabase,
-        set,
-        remove,
-        update,
-        get,
-        ref,
-        child,
-      } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
-
-      //======HERE GOES OUR CODE===============//
-
-      const db = getDatabase();
-      let btn = document.getElementById("addBtn");
-      let title = document.getElementById("title");
-      let description = document.getElementById("description")
-      let date = document.getElementById("date")
-
-
-      function Add() {
-        set(ref(db, "Todo/"), {
-          Title: title.value,
-          Description: description.value,
-          Date: date.value
-        })
-          .then(() => {
-            alert("data added");
-          })
-          .catch((error) => {
-            alert(error);
-          });
-      }
-
-      btn.addEventListener("click", (event) => {
-        event.preventDefault();
-        Add();
-      });
-    </script>
-    <script src="dist/bundle.js"></script>
+    <div id="content"></div>
+    <script src="script.js" type="module"></script>
   </body>
 </html>
