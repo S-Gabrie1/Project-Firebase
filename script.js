@@ -74,7 +74,6 @@ function Find() {
         event.preventDefault();
         checkedBox(todoCheckbox.checked, title.value, key);
       });
-
       const todoTitle = document.createElement("input");
       todoTitle.type = "text";
       todoTitle.value = todo.Title;
@@ -85,6 +84,13 @@ function Find() {
 
       const todoDate = document.createElement("p");
       todoDate.innerHTML = "Date: " + todo.Date;
+
+      const removeButton = document.createElement("button");
+      removeButton.innerHTML = "Remove";
+      removeButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        RemoveItem(title.value, key);
+      });
 
       const updateButton = document.createElement("button");
       updateButton.innerHTML = "Update";
@@ -124,7 +130,8 @@ function Find() {
         todoDescription,
         todoCheckbox,
         todoDate,
-        updateButton
+        updateButton,
+        removeButton
       );
       content.append(todoContainer);
     }
@@ -153,7 +160,6 @@ function addDueDateMessage(todoDate, container, todoDateptag) {
 Find();
 
 function checkedBox(isChecked, titleValue, todoKey) {
-  // Update the "Checked" property in Firebase based on the current checked state
   update(ref(db, "Todo/" + titleValue + "/" + todoKey), {
     Checked: isChecked,
   })
@@ -169,3 +175,15 @@ btn.addEventListener("click", (event) => {
   event.preventDefault();
   Add();
 });
+
+function RemoveItem(titleValue, todoKey) {
+  const todoRef = ref(db, "Todo/" + titleValue + "/" + todoKey);
+
+  remove(todoRef)
+    .then(() => {
+      console.log("Item removed!");
+    })
+    .catch(() => {
+      console.error("Not removed!");
+    });
+}
