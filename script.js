@@ -58,13 +58,12 @@ function Find() {
   const dbref = ref(db);
 
   get(child(dbref, "Todo/" + title.value)).then((snapshot) => {
-    console.log(snapshot.val());
-
     for (const key in snapshot.val()) {
       const todo = snapshot.val()[key];
 
       const todoContainer = document.createElement("div");
       todoContainer.classList.add("todo-item");
+      todoContainer.id = key;
 
       const todoCheckbox = document.createElement("input");
       todoCheckbox.type = "checkbox";
@@ -88,39 +87,14 @@ function Find() {
       const removeButton = document.createElement("button");
       removeButton.innerHTML = "Remove";
       removeButton.addEventListener("click", (event) => {
-        event.preventDefault();
         RemoveItem(title.value, key);
+        todoContainer.innerHTML = "";
       });
 
       const updateButton = document.createElement("button");
       updateButton.innerHTML = "Update";
       updateButton.addEventListener("click", (event) => {
-        event.preventDefault();
-        //MAX KOD GÅR HÄR
-        function updateTodo(
-          updatedTitle,
-          updatedDescription,
-          titleValue,
-          todoKey
-        ) {
-          // Update the title and description properties in Firebase
-          update(ref(db, "Todo/" + titleValue + "/" + todoKey), {
-            Title: updatedTitle,
-            Description: updatedDescription,
-          })
-            .then(() => {
-              console.log("Data updated successfully");
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        }
-        updateTodo(
-          todoTitle.value,
-          todoDescription.value,
-          title.value,
-          key
-        );
+        updateTodo(todoTitle.value, todoDescription.value, title.value, key);
       });
 
       addDueDateMessage(todo.Date, todoContainer, todoDate);
@@ -138,14 +112,11 @@ function Find() {
   });
 }
 
-
 function addDueDateMessage(todoDate, container, todoDateptag) {
   const todoItemDate = new Date(todoDate);
   const currentDate = new Date();
   const differenceInTime = todoItemDate.getTime() - currentDate.getTime();
-  const differenceInDays = Math.ceil(
-    differenceInTime / (1000 * 3600 * 24)
-  );
+  const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
 
   if (differenceInDays >= 0 && differenceInDays <= 5) {
     const daysRemaining =
@@ -156,10 +127,22 @@ function addDueDateMessage(todoDate, container, todoDateptag) {
   }
 }
 
-
-Find();
+function updateTodo(updatedTitle, updatedDescription, titleValue, todoKey) {
+  // Update the title and description properties in Firebase
+  update(ref(db, "Todo/" + titleValue + "/" + todoKey), {
+    Title: updatedTitle,
+    Description: updatedDescription,
+  })
+    .then(() => {
+      console.log("Data updated successfully");
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
 
 function checkedBox(isChecked, titleValue, todoKey) {
+  // Checked box changes boolean to true/false
   update(ref(db, "Todo/" + titleValue + "/" + todoKey), {
     Checked: isChecked,
   })
@@ -182,8 +165,15 @@ function RemoveItem(titleValue, todoKey) {
   remove(todoRef)
     .then(() => {
       console.log("Item removed!");
+      // Remove the corresponding todo container from the UI when remove button is clicked
+      const todoContainer = document.getElementById(todoKey);
+      if (todoContainer) {
+        todoContainer.remove();
+      }
     })
     .catch(() => {
       console.error("Not removed!");
     });
 }
+
+Find();
