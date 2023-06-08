@@ -91,6 +91,30 @@ function Find() {
       updateButton.addEventListener("click", (event) => {
         event.preventDefault();
         //MAX KOD GÅR HÄR
+        function updateTodo(
+          updatedTitle,
+          updatedDescription,
+          titleValue,
+          todoKey
+        ) {
+          // Update the title and description properties in Firebase
+          update(ref(db, "Todo/" + titleValue + "/" + todoKey), {
+            Title: updatedTitle,
+            Description: updatedDescription,
+          })
+            .then(() => {
+              console.log("Data updated successfully");
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+        updateTodo(
+          todoTitle.value,
+          todoDescription.value,
+          title.value,
+          key
+        );
       });
 
       //Qendresas KOD GÅR HÄR
