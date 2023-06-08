@@ -160,7 +160,6 @@ function addDueDateMessage(todoDate, container, todoDateptag) {
 Find();
 
 function checkedBox(isChecked, titleValue, todoKey) {
-  // Update the "Checked" property in Firebase based on the current checked state
   update(ref(db, "Todo/" + titleValue + "/" + todoKey), {
     Checked: isChecked,
   })
