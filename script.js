@@ -124,6 +124,10 @@ function addDueDateMessage(todoDate, container, todoDateptag) {
     const message = document.createElement("p");
     message.innerHTML = `Due ${daysRemaining} remaining!`;
     todoDateptag.appendChild(message);
+  } else if (differenceInDays < 0) {
+    const message = document.createElement("p");
+    message.innerHTML = "Due date has passed!";
+    todoDateptag.appendChild(message);
   }
 }
 
