@@ -35,14 +35,12 @@ let btn = document.getElementById("addBtn");
 let title = document.getElementById("title");
 let description = document.getElementById("description");
 let date = document.getElementById("date");
-let iD = document.getElementById("number-id");
 let content = document.querySelector("#content");
 
 function Add() {
   set(ref(db, "Todo/" + title.value), {
     Title: title.value,
     Description: description.value,
-    ID: iD.value,
     Checked: false,
     Date: date.value,
   })
